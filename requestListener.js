@@ -72,6 +72,7 @@ function ingela(outgoingResponse) {
         function done() {
             const announcements = JSON.parse(body).RESPONSE.RESULT[0].TrainAnnouncement
             outgoingResponse.writeHead(200, {'Content-Type': 'text/html; charset=utf-8'})
+            outgoingResponse.write('<!DOCTYPE html>')
             outgoingResponse.write('<table>')
             outgoingResponse.write('<caption>Från Tullinge</caption>')
             const sub = announcements.filter(announcement => announcement.LocationSignature === 'Sub')
@@ -89,6 +90,7 @@ function ingela(outgoingResponse) {
                     )
             })
 
+            outgoingResponse.write('</table>')
             outgoingResponse.end()
 
             function minutes(ankomst, avgang) {
