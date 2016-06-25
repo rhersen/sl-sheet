@@ -35,7 +35,6 @@ function ingela(outgoingResponse) {
        <AND>
         <IN name='ProductInformation' value='Pendeltåg' />
         <NE name='Canceled' value='true' />
-        <LIKE name='AdvertisedTrainIdent' value='/[02468]$/' />
         <OR>
          <AND>
           <EQ name='ActivityType' value='Avgang' />
@@ -71,15 +70,36 @@ function ingela(outgoingResponse) {
 
         function done() {
             const announcements = JSON.parse(body).RESPONSE.RESULT[0].TrainAnnouncement
-            outgoingResponse.writeHead(200, {'Content-Type': 'text/html; charset=utf-8'})
-            outgoingResponse.write('<!DOCTYPE html>')
-            outgoingResponse.write('<table>')
-            outgoingResponse.write('<caption>Från Tullinge</caption>')
             const sub = announcements.filter(announcement => announcement.LocationSignature === 'Sub')
             const tul = announcements.filter(announcement => announcement.LocationSignature === 'Tul')
+            outgoingResponse.writeHead(200, {'Content-Type': 'text/html; charset=utf-8'})
+            outgoingResponse.write('<!DOCTYPE html>')
 
-            sub.forEach(ankomst => {
-                const avgangs = tul.filter(avgang => minutes(ankomst, avgang) > 29)
+            outgoingResponse.write('<table>')
+            outgoingResponse.write('<caption>Från Tullinge</caption>')
+            sub.filter(northbound)
+                .forEach(ankomst => selectAvgangAndWriteRow(tul.filter(northbound)
+                    .filter(avgang => minutes(ankomst, avgang) > 29), ankomst))
+            outgoingResponse.write('</table>')
+
+            outgoingResponse.write('<table>')
+            outgoingResponse.write('<caption>Från Sundbyberg</caption>')
+            tul.filter(southbound)
+                .forEach(ankomst => selectAvgangAndWriteRow(sub.filter(southbound)
+                    .filter(avgang => minutes(ankomst, avgang) > 29), ankomst))
+            outgoingResponse.write('</table>')
+
+            outgoingResponse.end()
+
+            function northbound(ankomst) {
+                return /[02468]$/.test(ankomst.AdvertisedTrainIdent)
+            }
+
+            function southbound(ankomst) {
+                return /[13579]$/.test(ankomst.AdvertisedTrainIdent)
+            }
+
+            function selectAvgangAndWriteRow(avgangs, ankomst) {
                 if (avgangs.length)
                     writeRow(ankomst, avgangs
                         .reduce((prev, cur) => {
@@ -88,10 +108,7 @@ function ingela(outgoingResponse) {
                             return diff2 < diff1 ? cur : prev
                         })
                     )
-            })
-
-            outgoingResponse.write('</table>')
-            outgoingResponse.end()
+            }
 
             function minutes(ankomst, avgang) {
                 const ank = ankomst.AdvertisedTimeAtLocation
