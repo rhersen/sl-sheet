@@ -76,6 +76,7 @@ function ingela(outgoingResponse) {
             outgoingResponse.write('<!DOCTYPE html>')
             outgoingResponse.write('<meta name="viewport" content="width=device-width, initial-scale=1.0" />')
             outgoingResponse.write('<title>Ingela</title>')
+            outgoingResponse.write(`<style>${css()}</style>`)
 
             outgoingResponse.write('<table>')
             outgoingResponse.write('<caption>Från Tullinge</caption>')
@@ -141,6 +142,22 @@ function ingela(outgoingResponse) {
 function favicon(response) {
     response.writeHead(200, {'Content-Type': 'image/x-icon'})
     response.end(atob('iVBORw0KGgoAAAANSUhEUgAAABAAAAAQEAYAAABPYyMiAAAABmJLR0T'))
+}
+
+function css() {
+    return `
+    body {
+        font-family: sans-serif
+    }
+
+    table {
+        margin-bottom: 1em
+    }
+
+    caption {
+        font-weight: bold
+    }
+    `
 }
 
 module.exports = requestListener
