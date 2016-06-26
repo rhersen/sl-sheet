@@ -3,12 +3,96 @@ const atob = require('atob')
 const moment = require('moment')
 
 function requestListener(incomingRequest, outgoingResponse) {
-    if (/favicon.ico/.test(decodeURIComponent(incomingRequest.url)))
+    let match
+    const url = decodeURIComponent(incomingRequest.url)
+
+    if (/favicon.ico/.test(url))
         favicon(outgoingResponse)
+    else if (match = /(\d\d\d\d)/.exec(url))
+        train(match[1], outgoingResponse)
     else
         ingela(outgoingResponse)
 }
 
+function train(id, outgoingResponse) {
+    const postData = query()
+    const options = {
+        hostname: 'api.trafikinfo.trafikverket.se',
+        port: 80,
+        path: '/v1.1/data.json',
+        method: 'POST',
+        headers: {
+            'Content-Length': Buffer.byteLength(postData)
+        }
+    }
+
+    const outgoingRequest = http.request(options, handleResponse)
+    outgoingRequest.on('error', handleError)
+    outgoingRequest.write(postData)
+
+    outgoingRequest.end()
+
+    function query() {
+        return `<REQUEST>
+     <LOGIN authenticationkey='cfdeb57c80374fcd80ca811d2bcb561a' />
+     <QUERY objecttype='TrainAnnouncement' orderBy='TimeAtLocation'>
+      <FILTER>
+       <AND>
+        <IN name='ProductInformation' value='Pendeltåg' />
+        <NE name='Canceled' value='true' />
+        <EQ name='AdvertisedTrainIdent' value='${id}' />
+        <GT name='TimeAtLocation' value='$dateadd(-0:12:00)' />
+        <LT name='TimeAtLocation' value='$dateadd(0:12:00)' />
+       </AND>
+      </FILTER>
+      <INCLUDE>LocationSignature</INCLUDE>
+      <INCLUDE>AdvertisedTrainIdent</INCLUDE>
+      <INCLUDE>AdvertisedTimeAtLocation</INCLUDE>
+      <INCLUDE>EstimatedTimeAtLocation</INCLUDE>
+      <INCLUDE>TimeAtLocation</INCLUDE>
+      <INCLUDE>ToLocation</INCLUDE>
+      <INCLUDE>ActivityType</INCLUDE>
+     </QUERY>
+    </REQUEST>`
+    }
+
+    function handleResponse(incomingResponse) {
+        let body = ''
+        incomingResponse.setEncoding('utf8')
+        incomingResponse.on('data', chunk => body += chunk)
+        incomingResponse.on('end', done)
+
+        function done() {
+            const announcements = JSON.parse(body).RESPONSE.RESULT[0].TrainAnnouncement
+            outgoingResponse.writeHead(200, {'Content-Type': 'text/html; charset=utf-8'})
+            outgoingResponse.write('<!DOCTYPE html>')
+            outgoingResponse.write('<meta name="viewport" content="width=device-width, initial-scale=1.0" />')
+            outgoingResponse.write('<title>${id}</title>')
+            outgoingResponse.write(`<style>${css()}</style>`)
+
+            outgoingResponse.write(`<p>${id}</p>`)
+
+            if (announcements) {
+                outgoingResponse.write('<table>')
+                announcements.forEach(announcement => {
+                    outgoingResponse.write('<tr>')
+                    outgoingResponse.write(`<td>${announcement.ActivityType}`)
+                    outgoingResponse.write(`<td>${announcement.LocationSignature}`)
+                    outgoingResponse.write(`<td class="actual">${announcement.TimeAtLocation.substring(11, 16)}`)
+                    outgoingResponse.write(`<td>${announcement.AdvertisedTimeAtLocation.substring(11, 16)}`)
+                })
+                outgoingResponse.write('</table>')
+            }
+
+            outgoingResponse.end()
+        }
+    }
+
+    function handleError(e) {
+        outgoingResponse.writeHead(500, {'Content-Type': 'text/plain'})
+        outgoingResponse.end(`problem with request: ${e.message}`)
+    }
+}
 function ingela(outgoingResponse) {
     const postData = query()
     const options = {
@@ -127,7 +211,7 @@ function ingela(outgoingResponse) {
                 const minuteDiff = minutes(ankomst, avgang) - 32
                 outgoingResponse.write('<tr>')
                 outgoingResponse.write(`<td>${departureTime}`)
-                outgoingResponse.write(`<td>${trainIdent}`)
+                outgoingResponse.write(`<td><a href=${trainIdent}>${trainIdent}</a>`)
                 outgoingResponse.write(`<td>${minuteDiff} min`)
             }
         }
@@ -155,6 +239,10 @@ function css() {
     }
 
     caption {
+        font-weight: bold
+    }
+
+    .actual {
         font-weight: bold
     }
     `
