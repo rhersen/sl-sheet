@@ -74,6 +74,8 @@ function ingela(outgoingResponse) {
             const tul = announcements.filter(announcement => announcement.LocationSignature === 'Tul')
             outgoingResponse.writeHead(200, {'Content-Type': 'text/html; charset=utf-8'})
             outgoingResponse.write('<!DOCTYPE html>')
+            outgoingResponse.write('<meta name="viewport" content="width=device-width, initial-scale=1.0" />')
+            outgoingResponse.write('<title>Ingela</title>')
 
             outgoingResponse.write('<table>')
             outgoingResponse.write('<caption>Från Tullinge</caption>')
