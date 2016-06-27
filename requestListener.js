@@ -73,14 +73,14 @@ function train(id, outgoingResponse) {
             outgoingResponse.write(`<p>${id}</p>`)
 
             if (announcements) {
+                announcements.sort((a1, a2) => moment(a2.TimeAtLocation).diff(moment(a1.TimeAtLocation), 'minutes'))
+                const announcement = announcements[0]
                 outgoingResponse.write('<table>')
-                announcements.forEach(announcement => {
-                    outgoingResponse.write('<tr>')
-                    outgoingResponse.write(`<td>${announcement.ActivityType}`)
-                    outgoingResponse.write(`<td>${announcement.LocationSignature}`)
-                    outgoingResponse.write(`<td class="actual">${announcement.TimeAtLocation.substring(11, 16)}`)
-                    outgoingResponse.write(`<td>${announcement.AdvertisedTimeAtLocation.substring(11, 16)}`)
-                })
+                outgoingResponse.write('<tr>')
+                outgoingResponse.write(`<td>${announcement.ActivityType}`)
+                outgoingResponse.write(`<td>${announcement.LocationSignature}`)
+                outgoingResponse.write(`<td class="actual">${announcement.TimeAtLocation.substring(11, 16)}`)
+                outgoingResponse.write(`<td>${announcement.AdvertisedTimeAtLocation.substring(11, 16)}`)
                 outgoingResponse.write('</table>')
             }
 
@@ -93,6 +93,7 @@ function train(id, outgoingResponse) {
         outgoingResponse.end(`problem with request: ${e.message}`)
     }
 }
+
 function ingela(outgoingResponse) {
     const postData = query()
     const options = {
