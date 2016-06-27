@@ -67,7 +67,7 @@ function train(id, outgoingResponse) {
             outgoingResponse.writeHead(200, {'Content-Type': 'text/html; charset=utf-8'})
             outgoingResponse.write('<!DOCTYPE html>')
             outgoingResponse.write('<meta name="viewport" content="width=device-width, initial-scale=1.0" />')
-            outgoingResponse.write('<title>${id}</title>')
+            outgoingResponse.write(`<title>${id}</title>`)
             outgoingResponse.write(`<style>${css()}</style>`)
 
             outgoingResponse.write(`<p>${id}</p>`)
@@ -172,9 +172,9 @@ function ingela(outgoingResponse) {
 
             outgoingResponse.write('<table>')
             outgoingResponse.write('<caption>Från Sundbyberg</caption>')
-            tul.filter(southbound)
-                .forEach(ankomst => selectAvgangAndWriteRow(sub.filter(southbound)
-                    .filter(avgang => minutes(ankomst, avgang) > 29), ankomst))
+            sub.filter(southbound)
+                .forEach(avgang => selectAnkomstAndWriteRow(tul.filter(southbound)
+                    .filter(ankomst => minutes(ankomst, avgang) > 29), avgang))
             outgoingResponse.write('</table>')
 
             outgoingResponse.end()
@@ -196,6 +196,16 @@ function ingela(outgoingResponse) {
                             return diff2 < diff1 ? cur : prev
                         })
                     )
+            }
+
+            function selectAnkomstAndWriteRow(ankomsts, avgang) {
+                if (ankomsts.length)
+                    writeRow(ankomsts
+                        .reduce((prev, cur) => {
+                            const diff1 = minutes(prev, avgang)
+                            const diff2 = minutes(cur, avgang)
+                            return diff2 < diff1 ? cur : prev
+                        }), avgang)
             }
 
             function minutes(ankomst, avgang) {
