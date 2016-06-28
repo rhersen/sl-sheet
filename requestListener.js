@@ -1,6 +1,7 @@
 const http = require('http')
 const atob = require('atob')
 const moment = require('moment')
+const formatLatestAnnouncement = require('./formatLatestAnnouncement')
 
 function requestListener(incomingRequest, outgoingResponse) {
     let match
@@ -48,7 +49,6 @@ function train(id, outgoingResponse) {
       <INCLUDE>LocationSignature</INCLUDE>
       <INCLUDE>AdvertisedTrainIdent</INCLUDE>
       <INCLUDE>AdvertisedTimeAtLocation</INCLUDE>
-      <INCLUDE>EstimatedTimeAtLocation</INCLUDE>
       <INCLUDE>TimeAtLocation</INCLUDE>
       <INCLUDE>ToLocation</INCLUDE>
       <INCLUDE>ActivityType</INCLUDE>
@@ -70,19 +70,9 @@ function train(id, outgoingResponse) {
             outgoingResponse.write(`<title>${id}</title>`)
             outgoingResponse.write(`<style>${css()}</style>`)
 
-            outgoingResponse.write(`<p>${id}</p>`)
-
-            if (announcements) {
-                announcements.sort((a1, a2) => moment(a2.TimeAtLocation).diff(moment(a1.TimeAtLocation), 'minutes'))
-                const announcement = announcements[0]
-                outgoingResponse.write('<table>')
-                outgoingResponse.write('<tr>')
-                outgoingResponse.write(`<td>${announcement.ActivityType}`)
-                outgoingResponse.write(`<td>${announcement.LocationSignature}`)
-                outgoingResponse.write(`<td class="actual">${announcement.TimeAtLocation.substring(11, 16)}`)
-                outgoingResponse.write(`<td>${announcement.AdvertisedTimeAtLocation.substring(11, 16)}`)
-                outgoingResponse.write('</table>')
-            }
+            outgoingResponse.write('<p>')
+            outgoingResponse.write(formatLatestAnnouncement(announcements))
+            outgoingResponse.write('</p>')
 
             outgoingResponse.end()
         }
