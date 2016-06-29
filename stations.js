@@ -3,7 +3,7 @@ const http = require('http')
 const key = require('./key')
 const css = require('./css')
 
-function stations(outgoingResponse) {
+function stations(callback) {
     const postData = query()
     const options = {
         hostname: 'api.trafikinfo.trafikverket.se',
@@ -16,7 +16,6 @@ function stations(outgoingResponse) {
     }
 
     const outgoingRequest = http.request(options, handleResponse)
-    outgoingRequest.on('error', handleError)
     outgoingRequest.write(postData)
 
     outgoingRequest.end()
@@ -29,17 +28,10 @@ function stations(outgoingResponse) {
 
         function done() {
             const trainStations = JSON.parse(body).RESPONSE.RESULT[0].TrainStation
-            outgoingResponse.writeHead(200, {'Content-Type': 'application/json; charset=utf-8'})
             let obj = {}
             trainStations.forEach(entry => obj[entry.LocationSignature] = entry.AdvertisedShortLocationName)
-            outgoingResponse.write(JSON.stringify(obj))
-            outgoingResponse.end()
+            callback(obj)
         }
-    }
-
-    function handleError(e) {
-        outgoingResponse.writeHead(500, {'Content-Type': 'text/plain'})
-        outgoingResponse.end(`problem with request: ${e.message}`)
     }
 }
 

@@ -12,11 +12,17 @@ function requestListener(incomingRequest, outgoingResponse) {
     if (/favicon.ico/.test(url))
         favicon(outgoingResponse)
     else if (/api.stations/.test(url))
-        stations(outgoingResponse)
+        stations(writeStations)
     else if (match = /(\d\d\d\d)/.exec(url))
         train(match[1], outgoingResponse)
     else
         ingela(outgoingResponse)
+
+    function writeStations(data) {
+        outgoingResponse.writeHead(200, {'Content-Type': 'application/json; charset=utf-8'})
+        outgoingResponse.write(JSON.stringify(data))
+        outgoingResponse.end()
+    }
 }
 
 function favicon(response) {

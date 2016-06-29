@@ -3,8 +3,14 @@ const http = require('http')
 const key = require('./key')
 const css = require('./css')
 const formatLatestAnnouncement = require('./formatLatestAnnouncement')
+const stations = require('./stations')
+
+let stationNames = false
 
 function train(id, outgoingResponse) {
+    if (!stationNames)
+        stations(data => stationNames = data)
+
     const postData = query(id)
     const options = {
         hostname: 'api.trafikinfo.trafikverket.se',
@@ -37,7 +43,7 @@ function train(id, outgoingResponse) {
             outgoingResponse.write(`<style>${css()}</style>`)
 
             outgoingResponse.write('<p>')
-            outgoingResponse.write(formatLatestAnnouncement(announcements))
+            outgoingResponse.write(formatLatestAnnouncement(announcements, stationNames))
             outgoingResponse.write('</p>')
 
             outgoingResponse.end()
