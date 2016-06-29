@@ -4,7 +4,7 @@ const css = require('./css')
 const formatLatestAnnouncement = require('./formatLatestAnnouncement')
 
 function train(id, outgoingResponse) {
-    const postData = query()
+    const postData = query(id)
     const options = {
         hostname: 'api.trafikinfo.trafikverket.se',
         port: 80,
@@ -20,29 +20,6 @@ function train(id, outgoingResponse) {
     outgoingRequest.write(postData)
 
     outgoingRequest.end()
-
-    function query() {
-        return `<REQUEST>
-     <LOGIN authenticationkey='cfdeb57c80374fcd80ca811d2bcb561a' />
-     <QUERY objecttype='TrainAnnouncement' orderBy='TimeAtLocation'>
-      <FILTER>
-       <AND>
-        <IN name='ProductInformation' value='Pendeltåg' />
-        <NE name='Canceled' value='true' />
-        <EQ name='AdvertisedTrainIdent' value='${id}' />
-        <GT name='TimeAtLocation' value='$dateadd(-0:12:00)' />
-        <LT name='TimeAtLocation' value='$dateadd(0:12:00)' />
-       </AND>
-      </FILTER>
-      <INCLUDE>LocationSignature</INCLUDE>
-      <INCLUDE>AdvertisedTrainIdent</INCLUDE>
-      <INCLUDE>AdvertisedTimeAtLocation</INCLUDE>
-      <INCLUDE>TimeAtLocation</INCLUDE>
-      <INCLUDE>ToLocation</INCLUDE>
-      <INCLUDE>ActivityType</INCLUDE>
-     </QUERY>
-    </REQUEST>`
-    }
 
     function handleResponse(incomingResponse) {
         let body = ''
@@ -70,6 +47,29 @@ function train(id, outgoingResponse) {
         outgoingResponse.writeHead(500, {'Content-Type': 'text/plain'})
         outgoingResponse.end(`problem with request: ${e.message}`)
     }
+}
+
+function query(id) {
+    return `<REQUEST>
+     <LOGIN authenticationkey='cfdeb57c80374fcd80ca811d2bcb561a' />
+     <QUERY objecttype='TrainAnnouncement' orderBy='TimeAtLocation'>
+      <FILTER>
+       <AND>
+        <IN name='ProductInformation' value='Pendeltåg' />
+        <NE name='Canceled' value='true' />
+        <EQ name='AdvertisedTrainIdent' value='${id}' />
+        <GT name='TimeAtLocation' value='$dateadd(-0:12:00)' />
+        <LT name='TimeAtLocation' value='$dateadd(0:12:00)' />
+       </AND>
+      </FILTER>
+      <INCLUDE>LocationSignature</INCLUDE>
+      <INCLUDE>AdvertisedTrainIdent</INCLUDE>
+      <INCLUDE>AdvertisedTimeAtLocation</INCLUDE>
+      <INCLUDE>TimeAtLocation</INCLUDE>
+      <INCLUDE>ToLocation</INCLUDE>
+      <INCLUDE>ActivityType</INCLUDE>
+     </QUERY>
+    </REQUEST>`
 }
 
 module.exports = train

@@ -21,41 +21,6 @@ function ingela(outgoingResponse) {
 
     outgoingRequest.end()
 
-    function query() {
-        return `<REQUEST>
-     <LOGIN authenticationkey='cfdeb57c80374fcd80ca811d2bcb561a' />
-     <QUERY objecttype='TrainAnnouncement' orderBy='AdvertisedTimeAtLocation'>
-      <FILTER>
-       <AND>
-        <IN name='ProductInformation' value='Pendeltåg' />
-        <NE name='Canceled' value='true' />
-        <OR>
-         <AND>
-          <EQ name='ActivityType' value='Avgang' />
-          <EQ name='LocationSignature' value='Tul' />
-         </AND>
-         <AND>
-          <EQ name='ActivityType' value='Ankomst' />
-          <EQ name='LocationSignature' value='Sub' />
-         </AND>
-        </OR>
-        <AND>
-         <GT name='AdvertisedTimeAtLocation' value='$dateadd(-1:00:00)' />
-         <LT name='AdvertisedTimeAtLocation' value='$dateadd(2:00:00)' />
-        </AND>
-       </AND>
-      </FILTER>
-      <INCLUDE>LocationSignature</INCLUDE>
-      <INCLUDE>AdvertisedTrainIdent</INCLUDE>
-      <INCLUDE>AdvertisedTimeAtLocation</INCLUDE>
-      <INCLUDE>EstimatedTimeAtLocation</INCLUDE>
-      <INCLUDE>TimeAtLocation</INCLUDE>
-      <INCLUDE>ToLocation</INCLUDE>
-      <INCLUDE>ActivityType</INCLUDE>
-     </QUERY>
-    </REQUEST>`
-    }
-
     function handleResponse(incomingResponse) {
         let body = ''
         incomingResponse.setEncoding('utf8')
@@ -141,6 +106,41 @@ function ingela(outgoingResponse) {
         outgoingResponse.writeHead(500, {'Content-Type': 'text/plain'})
         outgoingResponse.end(`problem with request: ${e.message}`)
     }
+}
+
+function query() {
+    return `<REQUEST>
+     <LOGIN authenticationkey='cfdeb57c80374fcd80ca811d2bcb561a' />
+     <QUERY objecttype='TrainAnnouncement' orderBy='AdvertisedTimeAtLocation'>
+      <FILTER>
+       <AND>
+        <IN name='ProductInformation' value='Pendeltåg' />
+        <NE name='Canceled' value='true' />
+        <OR>
+         <AND>
+          <EQ name='ActivityType' value='Avgang' />
+          <EQ name='LocationSignature' value='Tul' />
+         </AND>
+         <AND>
+          <EQ name='ActivityType' value='Ankomst' />
+          <EQ name='LocationSignature' value='Sub' />
+         </AND>
+        </OR>
+        <AND>
+         <GT name='AdvertisedTimeAtLocation' value='$dateadd(-1:00:00)' />
+         <LT name='AdvertisedTimeAtLocation' value='$dateadd(2:00:00)' />
+        </AND>
+       </AND>
+      </FILTER>
+      <INCLUDE>LocationSignature</INCLUDE>
+      <INCLUDE>AdvertisedTrainIdent</INCLUDE>
+      <INCLUDE>AdvertisedTimeAtLocation</INCLUDE>
+      <INCLUDE>EstimatedTimeAtLocation</INCLUDE>
+      <INCLUDE>TimeAtLocation</INCLUDE>
+      <INCLUDE>ToLocation</INCLUDE>
+      <INCLUDE>ActivityType</INCLUDE>
+     </QUERY>
+    </REQUEST>`
 }
 
 module.exports = ingela
