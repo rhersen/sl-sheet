@@ -2,6 +2,7 @@ const atob = require('atob')
 
 const css = require('./css')
 const ingela = require('./ingela')
+const stations = require('./stations')
 const train = require('./train')
 
 function requestListener(incomingRequest, outgoingResponse) {
@@ -10,6 +11,8 @@ function requestListener(incomingRequest, outgoingResponse) {
 
     if (/favicon.ico/.test(url))
         favicon(outgoingResponse)
+    else if (/api.stations/.test(url))
+        stations(outgoingResponse)
     else if (match = /(\d\d\d\d)/.exec(url))
         train(match[1], outgoingResponse)
     else

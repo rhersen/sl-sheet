@@ -1,6 +1,7 @@
 const http = require('http')
 const moment = require('moment')
 
+const key = require('./key')
 const css = require('./css')
 
 function ingela(outgoingResponse) {
@@ -110,7 +111,7 @@ function ingela(outgoingResponse) {
 
 function query() {
     return `<REQUEST>
-     <LOGIN authenticationkey='cfdeb57c80374fcd80ca811d2bcb561a' />
+     <LOGIN authenticationkey='${key}' />
      <QUERY objecttype='TrainAnnouncement' orderBy='AdvertisedTimeAtLocation'>
       <FILTER>
        <AND>

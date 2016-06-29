@@ -1,5 +1,6 @@
 const http = require('http')
 
+const key = require('./key')
 const css = require('./css')
 const formatLatestAnnouncement = require('./formatLatestAnnouncement')
 
@@ -51,7 +52,7 @@ function train(id, outgoingResponse) {
 
 function query(id) {
     return `<REQUEST>
-     <LOGIN authenticationkey='cfdeb57c80374fcd80ca811d2bcb561a' />
+     <LOGIN authenticationkey='${key}' />
      <QUERY objecttype='TrainAnnouncement' orderBy='TimeAtLocation'>
       <FILTER>
        <AND>
