@@ -1,6 +1,6 @@
 const http = require('http')
 
-const key = require('./key')
+const announcementQuery = require('./announcementQuery')
 const css = require('./css')
 const formatLatestAnnouncement = require('./formatLatestAnnouncement')
 const stations = require('./stations')
@@ -11,7 +11,11 @@ function train(id, outgoingResponse) {
     if (!stationNames)
         stations(data => stationNames = data)
 
-    const postData = query(id)
+    const postData = announcementQuery(`
+        <EQ name='AdvertisedTrainIdent' value='${id}' />
+        <GT name='TimeAtLocation' value='$dateadd(-0:12:00)' />
+        <LT name='TimeAtLocation' value='$dateadd(0:12:00)' />`)
+
     const options = {
         hostname: 'api.trafikinfo.trafikverket.se',
         port: 80,
@@ -54,29 +58,6 @@ function train(id, outgoingResponse) {
         outgoingResponse.writeHead(500, {'Content-Type': 'text/plain'})
         outgoingResponse.end(`problem with request: ${e.message}`)
     }
-}
-
-function query(id) {
-    return `<REQUEST>
-     <LOGIN authenticationkey='${key}' />
-     <QUERY objecttype='TrainAnnouncement' orderBy='TimeAtLocation'>
-      <FILTER>
-       <AND>
-        <IN name='ProductInformation' value='Pendeltåg' />
-        <NE name='Canceled' value='true' />
-        <EQ name='AdvertisedTrainIdent' value='${id}' />
-        <GT name='TimeAtLocation' value='$dateadd(-0:12:00)' />
-        <LT name='TimeAtLocation' value='$dateadd(0:12:00)' />
-       </AND>
-      </FILTER>
-      <INCLUDE>LocationSignature</INCLUDE>
-      <INCLUDE>AdvertisedTrainIdent</INCLUDE>
-      <INCLUDE>AdvertisedTimeAtLocation</INCLUDE>
-      <INCLUDE>TimeAtLocation</INCLUDE>
-      <INCLUDE>ToLocation</INCLUDE>
-      <INCLUDE>ActivityType</INCLUDE>
-     </QUERY>
-    </REQUEST>`
 }
 
 module.exports = train
