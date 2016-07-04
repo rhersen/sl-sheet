@@ -26,7 +26,8 @@ function ingela(outgoingResponse) {
         path: '/v1.1/data.json',
         method: 'POST',
         headers: {
-            'Content-Length': Buffer.byteLength(postData)
+            'Content-Length': Buffer.byteLength(postData),
+            'Cache-Control': 'no-cache'
         }
     }
 
