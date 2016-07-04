@@ -26,8 +26,7 @@ function ingela(outgoingResponse) {
         path: '/v1.1/data.json',
         method: 'POST',
         headers: {
-            'Content-Length': Buffer.byteLength(postData),
-            'Cache-Control': 'no-cache'
+            'Content-Length': Buffer.byteLength(postData)
         }
     }
 
@@ -47,7 +46,7 @@ function ingela(outgoingResponse) {
             const announcements = JSON.parse(body).RESPONSE.RESULT[0].TrainAnnouncement
             const sub = announcements.filter(announcement => announcement.LocationSignature === 'Sub')
             const tul = announcements.filter(announcement => announcement.LocationSignature === 'Tul')
-            outgoingResponse.writeHead(200, {'Content-Type': 'text/html; charset=utf-8'})
+            outgoingResponse.writeHead(200, {'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-cache'})
             outgoingResponse.write('<!DOCTYPE html>')
             outgoingResponse.write('<meta name="viewport" content="width=device-width, initial-scale=1.0" />')
             outgoingResponse.write('<title>Ingela</title>')
