@@ -2,24 +2,19 @@ const http = require('http')
 const moment = require('moment')
 
 const announcementQuery = require('./announcementQuery')
+const MatchingTrains = require('./MatchingTrains')
 const css = require('./css')
 
 function ingela(outgoingResponse) {
     const postData = announcementQuery(`
         <OR>
-         <AND>
-          <EQ name='ActivityType' value='Avgang' />
           <EQ name='LocationSignature' value='Tul' />
-         </AND>
-         <AND>
-          <EQ name='ActivityType' value='Ankomst' />
           <EQ name='LocationSignature' value='Sub' />
-         </AND>
         </OR>
         <GT name='AdvertisedTimeAtLocation' value='$dateadd(-1:00:00)' />
         <LT name='AdvertisedTimeAtLocation' value='$dateadd(2:00:00)' />`
     )
-    
+
     const options = {
         hostname: 'api.trafikinfo.trafikverket.se',
         port: 80,
@@ -43,9 +38,13 @@ function ingela(outgoingResponse) {
         incomingResponse.on('end', done)
 
         function done() {
-            const announcements = JSON.parse(body).RESPONSE.RESULT[0].TrainAnnouncement
-            const sub = announcements.filter(announcement => announcement.LocationSignature === 'Sub')
-            const tul = announcements.filter(announcement => announcement.LocationSignature === 'Tul')
+            const as = JSON.parse(body).RESPONSE.RESULT[0].TrainAnnouncement
+            const sub = as.filter(a => a.LocationSignature === 'Sub').filter(a => a.ActivityType === 'Ankomst')
+            const tul = as.filter(a => a.LocationSignature === 'Tul').filter(a => a.ActivityType === 'Avgang')
+            const southbounds = sub.filter(southbound)
+                .map(avgang =>
+                    selectAnkomst(tul.filter(southbound).filter(ankomst => minutes(ankomst, avgang) > 29), avgang))
+
             outgoingResponse.writeHead(200, {'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-cache'})
             outgoingResponse.write('<!DOCTYPE html>')
             outgoingResponse.write('<meta name="viewport" content="width=device-width, initial-scale=1.0" />')
@@ -54,47 +53,33 @@ function ingela(outgoingResponse) {
 
             outgoingResponse.write('<table>')
             outgoingResponse.write('<caption>Från Tullinge</caption>')
-            sub.filter(northbound)
-                .forEach(ankomst => selectAvgangAndWriteRow(tul.filter(northbound)
-                    .filter(avgang => minutes(ankomst, avgang) > 29), ankomst))
+
+            MatchingTrains.getNorthbound(as)
+                .forEach(selected => selected && writeRow(selected.ankomst, selected.avgang))
+
             outgoingResponse.write('</table>')
 
             outgoingResponse.write('<table>')
             outgoingResponse.write('<caption>Från Sundbyberg</caption>')
-            sub.filter(southbound)
-                .forEach(avgang => selectAnkomstAndWriteRow(tul.filter(southbound)
-                    .filter(ankomst => minutes(ankomst, avgang) > 29), avgang))
+            southbounds.forEach(selected => selected && writeRow(selected.ankomst, selected.avgang))
             outgoingResponse.write('</table>')
 
             outgoingResponse.end()
-
-            function northbound(ankomst) {
-                return /[02468]$/.test(ankomst.AdvertisedTrainIdent)
-            }
 
             function southbound(ankomst) {
                 return /[13579]$/.test(ankomst.AdvertisedTrainIdent)
             }
 
-            function selectAvgangAndWriteRow(avgangs, ankomst) {
-                if (avgangs.length)
-                    writeRow(ankomst, avgangs
-                        .reduce((prev, cur) => {
-                            const diff1 = minutes(ankomst, prev)
-                            const diff2 = minutes(ankomst, cur)
-                            return diff2 < diff1 ? cur : prev
-                        })
-                    )
-            }
+            function selectAnkomst(ankomsts, avgang) {
+                if (ankomsts.length) {
+                    const selected = ankomsts.reduce((prev, cur) => {
+                        const diff1 = minutes(prev, avgang)
+                        const diff2 = minutes(cur, avgang)
+                        return diff2 < diff1 ? cur : prev
+                    })
 
-            function selectAnkomstAndWriteRow(ankomsts, avgang) {
-                if (ankomsts.length)
-                    writeRow(ankomsts
-                        .reduce((prev, cur) => {
-                            const diff1 = minutes(prev, avgang)
-                            const diff2 = minutes(cur, avgang)
-                            return diff2 < diff1 ? cur : prev
-                        }), avgang)
+                    return {ankomst: selected, avgang: avgang}
+                }
             }
 
             function minutes(ankomst, avgang) {
