@@ -39,8 +39,8 @@ function ingela(outgoingResponse) {
 
         function done() {
             const as = JSON.parse(body).RESPONSE.RESULT[0].TrainAnnouncement
-            const sub = as.filter(a => a.LocationSignature === 'Sub').filter(a => a.ActivityType === 'Ankomst')
-            const tul = as.filter(a => a.LocationSignature === 'Tul').filter(a => a.ActivityType === 'Avgang')
+            const sub = as.filter(a => a.LocationSignature === 'Sub').filter(a => a.ActivityType === 'Avgang')
+            const tul = as.filter(a => a.LocationSignature === 'Tul').filter(a => a.ActivityType === 'Ankomst')
             const southbounds = sub.filter(southbound)
                 .map(avgang =>
                     selectAnkomst(tul.filter(southbound).filter(ankomst => minutes(ankomst, avgang) > 29), avgang))
