@@ -62,15 +62,13 @@ describe('MatchingTrains', function () {
                 'AdvertisedTimeAtLocation': '2016-07-08T08:06:00',
                 'AdvertisedTrainIdent': '2812',
                 'LocationSignature': 'Sub',
-                'ToLocation': [{'LocationName': 'Spå', 'Priority': 1, 'Order': 0}],
-                'TimeAtLocation': '2016-07-08T08:05:00'
+                'ToLocation': [{'LocationName': 'Spå', 'Priority': 1, 'Order': 0}]
             }, {
                 'ActivityType': 'Avgang',
                 'AdvertisedTimeAtLocation': '2016-07-08T08:06:00',
                 'AdvertisedTrainIdent': '2812',
                 'LocationSignature': 'Sub',
-                'ToLocation': [{'LocationName': 'Spå', 'Priority': 1, 'Order': 0}],
-                'TimeAtLocation': '2016-07-08T08:06:00'
+                'ToLocation': [{'LocationName': 'Spå', 'Priority': 1, 'Order': 0}]
             }, {
                 'ActivityType': 'Ankomst',
                 'AdvertisedTimeAtLocation': '2016-07-08T08:21:00',
@@ -82,8 +80,7 @@ describe('MatchingTrains', function () {
                 'AdvertisedTimeAtLocation': '2016-07-08T07:54:00',
                 'AdvertisedTrainIdent': '2813',
                 'LocationSignature': 'Sub',
-                'ToLocation': [{'LocationName': 'Skg', 'Priority': 1, 'Order': 0}],
-                'TimeAtLocation': '2016-07-08T07:53:00'
+                'ToLocation': [{'LocationName': 'Skg', 'Priority': 1, 'Order': 0}]
             }, {
                 'ActivityType': 'Avgang',
                 'AdvertisedTimeAtLocation': '2016-07-08T08:21:00',
@@ -95,8 +92,7 @@ describe('MatchingTrains', function () {
                 'AdvertisedTimeAtLocation': '2016-07-08T07:54:00',
                 'AdvertisedTrainIdent': '2813',
                 'LocationSignature': 'Sub',
-                'ToLocation': [{'LocationName': 'Skg', 'Priority': 1, 'Order': 0}],
-                'TimeAtLocation': '2016-07-08T07:54:00'
+                'ToLocation': [{'LocationName': 'Skg', 'Priority': 1, 'Order': 0}]
             }, {
                 'ActivityType': 'Avgang',
                 'AdvertisedTimeAtLocation': '2016-07-08T08:36:00',
@@ -114,15 +110,13 @@ describe('MatchingTrains', function () {
                 'AdvertisedTimeAtLocation': '2016-07-08T08:09:00',
                 'AdvertisedTrainIdent': '2515',
                 'LocationSignature': 'Sub',
-                'ToLocation': [{'LocationName': 'Skg', 'Priority': 1, 'Order': 0}],
-                'TimeAtLocation': '2016-07-08T08:08:00'
+                'ToLocation': [{'LocationName': 'Skg', 'Priority': 1, 'Order': 0}]
             }, {
                 'ActivityType': 'Avgang',
                 'AdvertisedTimeAtLocation': '2016-07-08T08:09:00',
                 'AdvertisedTrainIdent': '2515',
                 'LocationSignature': 'Sub',
-                'ToLocation': [{'LocationName': 'Skg', 'Priority': 1, 'Order': 0}],
-                'TimeAtLocation': '2016-07-08T08:09:00'
+                'ToLocation': [{'LocationName': 'Skg', 'Priority': 1, 'Order': 0}]
             }, {
                 'ActivityType': 'Ankomst',
                 'AdvertisedTimeAtLocation': '2016-07-08T08:24:00',
@@ -140,15 +134,13 @@ describe('MatchingTrains', function () {
                 'AdvertisedTimeAtLocation': '2016-07-08T07:53:00',
                 'AdvertisedTrainIdent': '2611',
                 'LocationSignature': 'Tul',
-                'ToLocation': [{'LocationName': 'Söc', 'Priority': 1, 'Order': 0}],
-                'TimeAtLocation': '2016-07-08T07:54:00'
+                'ToLocation': [{'LocationName': 'Söc', 'Priority': 1, 'Order': 0}]
             }, {
                 'ActivityType': 'Ankomst',
                 'AdvertisedTimeAtLocation': '2016-07-08T07:53:00',
                 'AdvertisedTrainIdent': '2611',
                 'LocationSignature': 'Tul',
-                'ToLocation': [{'LocationName': 'Söc', 'Priority': 1, 'Order': 0}],
-                'TimeAtLocation': '2016-07-08T07:53:00'
+                'ToLocation': [{'LocationName': 'Söc', 'Priority': 1, 'Order': 0}]
             }, {
                 'ActivityType': 'Avgang',
                 'AdvertisedTimeAtLocation': '2016-07-08T08:15:00',
@@ -160,22 +152,19 @@ describe('MatchingTrains', function () {
                 'AdvertisedTimeAtLocation': '2016-07-08T08:15:00',
                 'AdvertisedTrainIdent': '2213',
                 'LocationSignature': 'Tul',
-                'ToLocation': [{'LocationName': 'Tu', 'Priority': 1, 'Order': 0}],
-                'TimeAtLocation': '2016-07-08T08:14:00'
+                'ToLocation': [{'LocationName': 'Tu', 'Priority': 1, 'Order': 0}]
             }, {
                 'ActivityType': 'Avgang',
                 'AdvertisedTimeAtLocation': '2016-07-08T08:08:00',
                 'AdvertisedTrainIdent': '2713',
                 'LocationSignature': 'Tul',
-                'ToLocation': [{'LocationName': 'Söc', 'Priority': 1, 'Order': 0}],
-                'TimeAtLocation': '2016-07-08T08:08:00'
+                'ToLocation': [{'LocationName': 'Söc', 'Priority': 1, 'Order': 0}]
             }, {
                 'ActivityType': 'Ankomst',
                 'AdvertisedTimeAtLocation': '2016-07-08T08:08:00',
                 'AdvertisedTrainIdent': '2713',
                 'LocationSignature': 'Tul',
-                'ToLocation': [{'LocationName': 'Söc', 'Priority': 1, 'Order': 0}],
-                'TimeAtLocation': '2016-07-08T08:08:00'
+                'ToLocation': [{'LocationName': 'Söc', 'Priority': 1, 'Order': 0}]
             }, {
                 'ActivityType': 'Avgang',
                 'AdvertisedTimeAtLocation': '2016-07-08T08:23:00',
@@ -193,31 +182,25 @@ describe('MatchingTrains', function () {
                 'AdvertisedTimeAtLocation': '2016-07-08T07:52:00',
                 'AdvertisedTrainIdent': '2714',
                 'LocationSignature': 'Tul',
-                'ToLocation': [{'LocationName': 'Mr', 'Priority': 1, 'Order': 0}],
-                'EstimatedTimeAtLocation': '2016-07-08T07:53:00',
-                'TimeAtLocation': '2016-07-08T07:54:00'
+                'ToLocation': [{'LocationName': 'Mr', 'Priority': 1, 'Order': 0}]
             }, {
                 'ActivityType': 'Ankomst',
                 'AdvertisedTimeAtLocation': '2016-07-08T07:52:00',
                 'AdvertisedTrainIdent': '2714',
                 'LocationSignature': 'Tul',
-                'ToLocation': [{'LocationName': 'Mr', 'Priority': 1, 'Order': 0}],
-                'EstimatedTimeAtLocation': '2016-07-08T07:52:00',
-                'TimeAtLocation': '2016-07-08T07:53:00'
+                'ToLocation': [{'LocationName': 'Mr', 'Priority': 1, 'Order': 0}]
             }, {
                 'ActivityType': 'Avgang',
                 'AdvertisedTimeAtLocation': '2016-07-08T08:07:00',
                 'AdvertisedTrainIdent': '2614',
                 'LocationSignature': 'Tul',
-                'ToLocation': [{'LocationName': 'Mr', 'Priority': 1, 'Order': 0}],
-                'TimeAtLocation': '2016-07-08T08:07:00'
+                'ToLocation': [{'LocationName': 'Mr', 'Priority': 1, 'Order': 0}]
             }, {
                 'ActivityType': 'Ankomst',
                 'AdvertisedTimeAtLocation': '2016-07-08T08:07:00',
                 'AdvertisedTrainIdent': '2614',
                 'LocationSignature': 'Tul',
-                'ToLocation': [{'LocationName': 'Mr', 'Priority': 1, 'Order': 0}],
-                'TimeAtLocation': '2016-07-08T08:05:00'
+                'ToLocation': [{'LocationName': 'Mr', 'Priority': 1, 'Order': 0}]
             }, {
                 'ActivityType': 'Avgang',
                 'AdvertisedTimeAtLocation': '2016-07-08T08:22:00',
@@ -235,8 +218,7 @@ describe('MatchingTrains', function () {
                 'AdvertisedTimeAtLocation': '2016-07-08T08:15:00',
                 'AdvertisedTrainIdent': '2216',
                 'LocationSignature': 'Tul',
-                'ToLocation': [{'LocationName': 'U', 'Priority': 1, 'Order': 0}],
-                'TimeAtLocation': '2016-07-08T08:14:00'
+                'ToLocation': [{'LocationName': 'U', 'Priority': 1, 'Order': 0}]
             }, {
                 'ActivityType': 'Avgang',
                 'AdvertisedTimeAtLocation': '2016-07-08T08:15:00',
@@ -270,9 +252,7 @@ describe('MatchingTrains', function () {
                     'AdvertisedTimeAtLocation': '2016-07-08T07:52:00',
                     'AdvertisedTrainIdent': '2714',
                     'LocationSignature': 'Tul',
-                    'ToLocation': [{'LocationName': 'Mr', 'Priority': 1, 'Order': 0}],
-                    'EstimatedTimeAtLocation': '2016-07-08T07:53:00',
-                    'TimeAtLocation': '2016-07-08T07:54:00'
+                    'ToLocation': [{'LocationName': 'Mr', 'Priority': 1, 'Order': 0}]
                 }
             }]
         )
