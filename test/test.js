@@ -257,5 +257,64 @@ describe('MatchingTrains', function () {
                 }]
             )
         })
+        it('matches more than one connection', function () {
+            expect(MatchingTrains.getNorthbound([{
+                'ActivityType': 'Ankomst',
+                'AdvertisedTimeAtLocation': '2016-08-07T13:36:00',
+                'AdvertisedTrainIdent': '2834',
+                'LocationSignature': 'Sub',
+                'ToLocation': [{'LocationName': 'Spå', 'Priority': 1, 'Order': 0}]
+            }, {
+                'ActivityType': 'Ankomst',
+                'AdvertisedTimeAtLocation': '2016-08-07T14:06:00',
+                'AdvertisedTrainIdent': '2836',
+                'LocationSignature': 'Sub',
+                'ToLocation': [{'LocationName': 'Spå', 'Priority': 1, 'Order': 0}]
+            }, {
+                'ActivityType': 'Avgang',
+                'AdvertisedTimeAtLocation': '2016-08-07T12:52:00',
+                'AdvertisedTrainIdent': '2734',
+                'LocationSignature': 'Tul',
+                'ToLocation': [{'LocationName': 'Mr', 'Priority': 1, 'Order': 0}]
+            }, {
+                'ActivityType': 'Avgang',
+                'AdvertisedTimeAtLocation': '2016-08-07T13:22:00',
+                'AdvertisedTrainIdent': '2736',
+                'LocationSignature': 'Tul',
+                'ToLocation': [{'LocationName': 'Mr', 'Priority': 1, 'Order': 0}]
+            }]).filter(x => x))
+                .to.deep.equal([{
+                    'ankomst': {
+                        'ActivityType': 'Ankomst',
+                        'AdvertisedTimeAtLocation': '2016-08-07T13:36:00',
+                        'AdvertisedTrainIdent': '2834',
+                        'LocationSignature': 'Sub',
+                        'ToLocation': [{'LocationName': 'Spå', 'Priority': 1, 'Order': 0}]
+                    },
+                    'avgang': {
+                        'ActivityType': 'Avgang',
+                        'AdvertisedTimeAtLocation': '2016-08-07T12:52:00',
+                        'AdvertisedTrainIdent': '2734',
+                        'LocationSignature': 'Tul',
+                        'ToLocation': [{'LocationName': 'Mr', 'Priority': 1, 'Order': 0}]
+                    }
+                }, {
+                    'ankomst': {
+                        'ActivityType': 'Ankomst',
+                        'AdvertisedTimeAtLocation': '2016-08-07T14:06:00',
+                        'AdvertisedTrainIdent': '2836',
+                        'LocationSignature': 'Sub',
+                        'ToLocation': [{'LocationName': 'Spå', 'Priority': 1, 'Order': 0}]
+                    },
+                    'avgang': {
+                        'ActivityType': 'Avgang',
+                        'AdvertisedTimeAtLocation': '2016-08-07T13:22:00',
+                        'AdvertisedTrainIdent': '2736',
+                        'LocationSignature': 'Tul',
+                        'ToLocation': [{'LocationName': 'Mr', 'Priority': 1, 'Order': 0}]
+                    }
+                }]
+            )
+        })
     })
 })
