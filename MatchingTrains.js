@@ -1,35 +1,41 @@
 const moment = require('moment')
 
 function getNorthbound(as) {
-    const sub = as.filter(a => a.LocationSignature === 'Sub').filter(a => a.ActivityType === 'Ankomst')
-    const tul = as.filter(a => a.LocationSignature === 'Tul').filter(a => a.ActivityType === 'Avgang')
+    function isLocation(s) {
+        return a => a.LocationSignature === s
+    }
 
-    return sub.filter(northbound)
+    function isActivity(s) {
+        return a => a.ActivityType === s
+    }
+
+    const sub = as.filter(isLocation('Sub')).filter(isActivity('Ankomst')).filter(northbound)
+    const tul = as.filter(isLocation('Tul')).filter(isActivity('Avgang')).filter(northbound)
+
+    return sub
         .map(ankomst =>
-            selectAvgang(tul.filter(northbound).filter(avgang => minutes(ankomst, avgang) > 29), ankomst))
+            selectAvgang(tul.filter(avgang => minutes(ankomst, avgang) > 29), ankomst))
 
     function northbound(ankomst) {
         return /[02468]$/.test(ankomst.AdvertisedTrainIdent)
     }
 
     function selectAvgang(avgangs, ankomst) {
-        if (avgangs.length) {
-            const selected = avgangs.reduce((prev, cur) => {
-                const diff1 = minutes(ankomst, prev)
-                const diff2 = minutes(ankomst, cur)
-                return diff2 < diff1 ? cur : prev
-            })
+        if (avgangs.length)
+            return {
+                ankomst: ankomst,
+                avgang: avgangs.reduce(isTimeBefore)
+            }
+    }
 
-            return {ankomst: ankomst, avgang: selected}
-        }
+    function isTimeBefore(a, b) {
+        return moment(a.AdvertisedTimeAtLocation).isBefore(moment(b.AdvertisedTimeAtLocation)) ? b : a
     }
 
     function minutes(ankomst, avgang) {
-        const ank = ankomst.AdvertisedTimeAtLocation
-        const avg = avgang.AdvertisedTimeAtLocation
-        const ankm = moment(ank)
-        const avgm = moment(avg)
-        return ankm.diff(avgm, 'minutes')
+        const ank = moment(ankomst.AdvertisedTimeAtLocation)
+        const avg = moment(avgang.AdvertisedTimeAtLocation)
+        return ank.diff(avg, 'minutes')
     }
 }
 
