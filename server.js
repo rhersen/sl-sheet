@@ -1,22 +1,17 @@
 const atob = require('atob')
 
-const css = require('./css')
-const ingela = require('./ingela')
 const stations = require('./stations')
-const train = require('./train')
+const sheet = require('./sheet')
 
 function requestListener(incomingRequest, outgoingResponse) {
-    let match
     const url = decodeURIComponent(incomingRequest.url)
 
     if (/favicon.ico/.test(url))
         favicon(outgoingResponse)
     else if (/api.stations/.test(url))
         stations(writeStations)
-    else if (match = /(\d\d\d\d)/.exec(url))
-        train(match[1], outgoingResponse)
     else
-        ingela(outgoingResponse)
+        sheet(outgoingResponse)
 
     function writeStations(data) {
         outgoingResponse.writeHead(200, {'Content-Type': 'application/json; charset=utf-8'})

@@ -1,21 +1,24 @@
 function css() {
-    return `
-    body {
-        font-family: sans-serif
-    }
+    return `body {
+    font-family: sans-serif
+}
 
-    table {
-        margin-bottom: 1em
-    }
+table {
+    border-collapse: collapse;
+}
 
-    caption {
-        font-weight: bold
-    }
+td {
+    border-width: thin;
+    border-style: solid;
+}
 
-    .actual {
-        font-weight: bold
-    }
-    `
+caption {
+    font-weight: bold
+}
+
+.actual {
+    font-weight: bold
+}`
 }
 
 module.exports = css
