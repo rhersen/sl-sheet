@@ -1,55 +1,73 @@
 const expect = require('chai').expect
 
-const formatLatestAnnouncement = require('../formatLatestAnnouncement')
-const MatchingTrains = require('../MatchingTrains')
+const times = require('../times')
+const trains = require('../trains')
 
-describe('formatLatestAnnouncement', function () {
-    it('no activities', function () {
-        expect(formatLatestAnnouncement()).to.equal('Aktuell information saknas')
-        expect(formatLatestAnnouncement([])).to.equal('Aktuell information saknas')
+describe('trains', function () {
+    it('returns list of AdvertisedTrainIdent', function () {
+        expect(trains(
+            [{
+                'ActivityType': 'Ankomst',
+                'AdvertisedTimeAtLocation': '2016-09-05T21:22:00',
+                'AdvertisedTrainIdent': '2768',
+                'LocationSignature': 'Tul',
+                'ToLocation': [{'LocationName': 'Mr', 'Priority': 1, 'Order': 0}]
+            }, {
+                'ActivityType': 'Avgang',
+                'AdvertisedTimeAtLocation': '2016-09-05T21:22:00',
+                'AdvertisedTrainIdent': '2768',
+                'LocationSignature': 'Tul',
+                'ToLocation': [{'LocationName': 'Mr', 'Priority': 1, 'Order': 0}]
+            }, {
+                'ActivityType': 'Ankomst',
+                'AdvertisedTimeAtLocation': '2016-09-05T21:25:00',
+                'AdvertisedTrainIdent': '2768',
+                'LocationSignature': 'Flb',
+                'ToLocation': [{'LocationName': 'Mr', 'Priority': 1, 'Order': 0}]
+            }, {
+                'ActivityType': 'Avgang',
+                'AdvertisedTimeAtLocation': '2016-09-05T21:25:00',
+                'AdvertisedTrainIdent': '2768',
+                'LocationSignature': 'Flb',
+                'ToLocation': [{'LocationName': 'Mr', 'Priority': 1, 'Order': 0}]
+            }]
+        )).to.deep.equal(['2768'])
     })
+})
 
-    it('departure on time', function () {
-        expect(formatLatestAnnouncement([{
-            'ActivityType': 'Avgang',
-            'AdvertisedTimeAtLocation': '2016-06-28T22:06:00',
-            'AdvertisedTrainIdent': '2868',
-            'LocationSignature': 'Sub',
-            'ToLocation': [{'LocationName': 'Spå', 'Priority': 1, 'Order': 0}],
-            'TimeAtLocation': '2016-06-28T22:06:00'
-        }])).to.equal('Tåg 2868 mot Spå avgick från Sub i tid klockan 22:06')
-    })
-
-    it('departure one minute late', function () {
-        expect(formatLatestAnnouncement([{
-            'ActivityType': 'Ankomst',
-            'AdvertisedTimeAtLocation': '2016-06-28T22:19:00',
-            'AdvertisedTrainIdent': '2870',
-            'LocationSignature': 'Åbe',
-            'ToLocation': [{'LocationName': 'Spå', 'Priority': 1, 'Order': 0}],
-            'TimeAtLocation': '2016-06-28T22:20:00'
-        }])).to.equal('Tåg 2870 mot Spå ankom till Åbe nästan i tid klockan 22:20')
-    })
-
-    it('arrival three minutes late', function () {
-        expect(formatLatestAnnouncement([{
-            'ActivityType': 'Ankomst',
-            'AdvertisedTimeAtLocation': '2016-06-28T21:52:00',
-            'AdvertisedTrainIdent': '2769',
-            'LocationSignature': 'Åbe',
-            'ToLocation': [{'LocationName': 'Söc', 'Priority': 1, 'Order': 0}],
-            'TimeAtLocation': '2016-06-28T21:55:00'
-        }])).to.equal('Tåg 2769 mot Söc ankom till Åbe 3 minuter försenat klockan 21:55')
-    })
-
-    it('early arrival', function () {
-        expect(formatLatestAnnouncement([{
-            'ActivityType': 'Ankomst',
-            'AdvertisedTimeAtLocation': '2016-06-28T22:10:00',
-            'AdvertisedTrainIdent': '2868',
-            'LocationSignature': 'Spå',
-            'ToLocation': [{'LocationName': 'Spå', 'Priority': 1, 'Order': 0}],
-            'TimeAtLocation': '2016-06-28T22:09:00'
-        }])).to.equal('Tåg 2868 mot Spå ankom till Spå i god tid klockan 22:09')
+describe('times', function () {
+    it('returns object with composite keys', function () {
+        expect(times(
+            [{
+                'ActivityType': 'Ankomst',
+                'AdvertisedTimeAtLocation': '2016-09-05T21:22:00',
+                'AdvertisedTrainIdent': '2768',
+                'LocationSignature': 'Tul',
+                'ToLocation': [{'LocationName': 'Mr', 'Priority': 1, 'Order': 0}]
+            }, {
+                'ActivityType': 'Avgang',
+                'AdvertisedTimeAtLocation': '2016-09-05T21:22:00',
+                'AdvertisedTrainIdent': '2768',
+                'LocationSignature': 'Tul',
+                'ToLocation': [{'LocationName': 'Mr', 'Priority': 1, 'Order': 0}]
+            }, {
+                'ActivityType': 'Ankomst',
+                'AdvertisedTimeAtLocation': '2016-09-05T21:25:00',
+                'AdvertisedTrainIdent': '2768',
+                'LocationSignature': 'Flb',
+                'ToLocation': [{'LocationName': 'Mr', 'Priority': 1, 'Order': 0}]
+            }, {
+                'ActivityType': 'Avgang',
+                'AdvertisedTimeAtLocation': '2016-09-05T21:25:00',
+                'AdvertisedTrainIdent': '2768',
+                'LocationSignature': 'Flb',
+                'ToLocation': [{'LocationName': 'Mr', 'Priority': 1, 'Order': 0}]
+            }]
+        )).to.deep.equal({
+            Tul2768Ankomst: '2016-09-05T21:22:00',
+            Tul2768Avgang: '2016-09-05T21:22:00',
+            Flb2768Ankomst: '2016-09-05T21:25:00',
+            Flb2768Avgang: '2016-09-05T21:25:00'
+        })
     })
 })
