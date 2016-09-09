@@ -1,6 +1,4 @@
-const zipobject = require('lodash.zipobject')
+const keyby = require('lodash.keyby')
 
 module.exports = (announcements) =>
-    zipobject(
-        announcements.map(a => `${a.LocationSignature}${a.AdvertisedTrainIdent}${a.ActivityType}`),
-        announcements.map(a => a.AdvertisedTimeAtLocation))
+    keyby(announcements, a => `${a.LocationSignature}${a.AdvertisedTrainIdent}${a.ActivityType}`)

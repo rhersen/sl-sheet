@@ -6,16 +6,15 @@ const times = require('./times')
 const trains = require('./trains')
 
 function sheet(outgoingResponse) {
+    const locations = [
+        'Tul', 'Flb', 'Hu', 'Sta'
+    ]
+
     const postData = announcementQuery(`
-        <OR>
-          <EQ name='LocationSignature' value='Tul' />
-          <EQ name='LocationSignature' value='Flb' />
-          <EQ name='LocationSignature' value='Hu' />
-          <EQ name='LocationSignature' value='Sta' />
-        </OR>
         <LIKE name='AdvertisedTrainIdent' value='/[02468]$/' />
-        <GT name='AdvertisedTimeAtLocation' value='$dateadd(-0:32:00)' />
-        <LT name='AdvertisedTimeAtLocation' value='$dateadd(0:32:00)' />`
+        <GT name='AdvertisedTimeAtLocation' value='$dateadd(-0:16:00)' />
+        <LT name='AdvertisedTimeAtLocation' value='$dateadd(0:16:00)' />`,
+        locations
     )
 
     const options = {
@@ -41,7 +40,6 @@ function sheet(outgoingResponse) {
         incomingResponse.on('end', done)
 
         function done() {
-            const locations = ['Tul', 'Flb', 'Hu', 'Sta']
             const activityTypes = ['Ankomst', 'Avgang']
             const announcements = JSON.parse(body).RESPONSE.RESULT[0].TrainAnnouncement
             const trainIds = trains(announcements)
@@ -67,26 +65,10 @@ function sheet(outgoingResponse) {
 
             outgoingResponse.write('</table>')
 
-            outgoingResponse.write('<table>')
-
-            announcements.forEach(writeRow)
-
-            outgoingResponse.write('</table>')
-
             outgoingResponse.end()
 
-            function writeRow(data) {
-                outgoingResponse.write(`<tr><td>${data.AdvertisedTrainIdent}`)
-                outgoingResponse.write(`<td>${data.ToLocation.map(l => l.LocationName).join(', ')}`)
-                outgoingResponse.write(`<td>${data.ActivityType}`)
-                outgoingResponse.write(`<td>${data.LocationSignature}`)
-                outgoingResponse.write(`<td>${format(data.AdvertisedTimeAtLocation)}`)
-                outgoingResponse.write(`<td>${format(data.EstimatedTimeAtLocation)}`)
-                outgoingResponse.write(`<td>${format(data.TimeAtLocation)}`)
-            }
-
             function format(t) {
-                return t ? t.substring(11, 16) : ''
+                return t ? t.AdvertisedTimeAtLocation.substring(11, 16) : ''
             }
         }
     }

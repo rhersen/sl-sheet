@@ -1,6 +1,6 @@
 const key = require('./key')
 
-function announcementQuery(filters) {
+function announcementQuery(filters, locations) {
     return `<REQUEST>
      <LOGIN authenticationkey='${key}' />
      <QUERY objecttype='TrainAnnouncement' orderBy='AdvertisedTimeAtLocation'>
@@ -8,6 +8,7 @@ function announcementQuery(filters) {
        <AND>
         <IN name='ProductInformation' value='Pendeltåg' />
         <NE name='Canceled' value='true' />
+        <OR> ${locations.map(location => `<EQ name='LocationSignature' value='${location}' />`).join(' ')} </OR>
         ${filters}
        </AND>
       </FILTER>
