@@ -2,6 +2,7 @@ const http = require('http')
 
 const announcementQuery = require('./announcementQuery')
 const css = require('./css')
+const formatTimes = require('./formatTimes')
 const times = require('./times')
 const trains = require('./trains')
 
@@ -12,8 +13,8 @@ function sheet(outgoingResponse) {
 
     const postData = announcementQuery(`
         <LIKE name='AdvertisedTrainIdent' value='/[02468]$/' />
-        <GT name='AdvertisedTimeAtLocation' value='$dateadd(-0:16:00)' />
-        <LT name='AdvertisedTimeAtLocation' value='$dateadd(0:16:00)' />`,
+        <GT name='AdvertisedTimeAtLocation' value='$dateadd(-0:32:00)' />
+        <LT name='AdvertisedTimeAtLocation' value='$dateadd(0:32:00)' />`,
         locations
     )
 
@@ -59,17 +60,13 @@ function sheet(outgoingResponse) {
                     outgoingResponse.write('<tr>')
                     outgoingResponse.write(`<td>${activityType.substr(0, 3)} ${station}`)
                     trainIds.forEach(trainId =>
-                        outgoingResponse.write(`<td>${format(ts[station + trainId + activityType])}`))
+                        outgoingResponse.write(`<td>${formatTimes(ts[station + trainId + activityType])}`))
                 })
             })
 
             outgoingResponse.write('</table>')
 
             outgoingResponse.end()
-
-            function format(t) {
-                return t ? t.AdvertisedTimeAtLocation.substring(11, 16) : ''
-            }
         }
     }
 
