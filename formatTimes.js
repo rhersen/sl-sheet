@@ -6,10 +6,16 @@ module.exports = function (s) {
     const e = f(s.EstimatedTimeAtLocation)
     const t = f(s.TimeAtLocation)
 
+    if (!e && !t)
+        return a
+
     if (a === t)
         return wrap(t, 'b')
 
-    return `${a}/${t ? '' : wrap(e, 'i')}/${wrap(t, 'b')}`
+    if (t)
+        return `${a}/${wrap(t, 'b')}`
+
+    return `${a}/${wrap(e, 'i')}`
 }
 
 function wrap(s, tag) {

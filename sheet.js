@@ -10,14 +10,16 @@ const trains = require('./trains')
 
 function sheet(outgoingResponse) {
     const locations = [
-        'Tul', 'Flb', 'Hu', 'Sta'
+        // 'Tul', 'Flb', 'Hu', 'Sta'
+        'Sta', 'Hu', 'Flb', 'Tul'
         // 'Äs', 'Åbe', 'Sst', 'Cst', 'Ke'
+        // 'Ke', 'Cst', 'Sst', 'Åbe', 'Äs'
     ]
 
     const postData = announcementQuery(`
-        <LIKE name='AdvertisedTrainIdent' value='/[02468]$/' />
-        <GT name='AdvertisedTimeAtLocation' value='$dateadd(-0:32:00)' />
-        <LT name='AdvertisedTimeAtLocation' value='$dateadd(0:32:00)' />`,
+        <LIKE name='AdvertisedTrainIdent' value='/[13579]$/' />
+        <GT name='AdvertisedTimeAtLocation' value='$dateadd(-0:30:00)' />
+        <LT name='AdvertisedTimeAtLocation' value='$dateadd(0:30:00)' />`,
         locations
     )
 
