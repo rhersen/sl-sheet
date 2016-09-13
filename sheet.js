@@ -1,5 +1,7 @@
 const http = require('http')
 
+const foreach = require('lodash.foreach')
+
 const announcementQuery = require('./announcementQuery')
 const css = require('./css')
 const formatTimes = require('./formatTimes')
@@ -9,6 +11,7 @@ const trains = require('./trains')
 function sheet(outgoingResponse) {
     const locations = [
         'Tul', 'Flb', 'Hu', 'Sta'
+        // 'Äs', 'Åbe', 'Sst', 'Cst', 'Ke'
     ]
 
     const postData = announcementQuery(`
@@ -53,13 +56,16 @@ function sheet(outgoingResponse) {
             outgoingResponse.write(`<style>${css()}</style>`)
             outgoingResponse.write('<table>')
             outgoingResponse.write('<tr><th>')
-            trainIds.forEach(trainId => outgoingResponse.write(`<th>${trainId}`))
+
+            foreach(trainIds, (location, trainId) =>
+                outgoingResponse.write(`<th>${trainId} ${location}`))
 
             locations.forEach(station => {
                 activityTypes.forEach(activityType => {
                     outgoingResponse.write('<tr>')
                     outgoingResponse.write(`<td>${activityType.substr(0, 3)} ${station}`)
-                    trainIds.forEach(trainId =>
+
+                    foreach(trainIds, (location, trainId) =>
                         outgoingResponse.write(`<td>${formatTimes(ts[station + trainId + activityType])}`))
                 })
             })

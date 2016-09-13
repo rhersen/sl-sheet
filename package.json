@@ -10,8 +10,9 @@
   "license": "BSD-2-Clause",
   "dependencies": {
     "atob": "^2.0.3",
-    "lodash.uniq": "~4",
-    "lodash.keyby": "~4",
+    "lodash.foreach": "4.x",
+    "lodash.keyby": "4.x",
+    "lodash.zipobject": "4.x",
     "moment": "^2.13.0"
   },
   "devDependencies": {
