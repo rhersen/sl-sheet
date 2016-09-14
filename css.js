@@ -7,9 +7,18 @@ table {
     border-collapse: collapse;
 }
 
-td {
-    border-width: thin;
-    border-style: solid;
+td.Ankomst {
+    border-left: thin solid;
+    border-right: thin solid;
+    border-top: thin solid;
+    border-bottom: none;
+}
+
+td.Avgang {
+    border-left: thin solid;
+    border-right: thin solid;
+    border-top: none;
+    border-bottom: thin solid;
 }
 
 caption {

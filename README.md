@@ -1,3 +1,3 @@
-# ingela
+# sheet
 
-This webapp selects the best trains for going from Tullinge to Sundbyberg.
+This webapp displays trains in the style of an Excel worksheet.

@@ -10,8 +10,8 @@ const trains = require('./trains')
 
 function sheet(outgoingResponse) {
     const locations = [
-        // 'Tul', 'Flb', 'Hu', 'Sta'
-        'Sta', 'Hu', 'Flb', 'Tul'
+        'Tul', 'Flb', 'Hu', 'Sta'
+        // 'Sta', 'Hu', 'Flb', 'Tul'
         // 'Äs', 'Åbe', 'Sst', 'Cst', 'Ke'
         // 'Ke', 'Cst', 'Sst', 'Åbe', 'Äs'
     ]
@@ -65,10 +65,11 @@ function sheet(outgoingResponse) {
             locations.forEach(station => {
                 activityTypes.forEach(activityType => {
                     outgoingResponse.write('<tr>')
-                    outgoingResponse.write(`<td>${activityType.substr(0, 3)} ${station}`)
+                    outgoingResponse.write(`<td class=${activityType}>${activityType.substr(0, 3)} ${station}`)
 
                     foreach(trainIds, (location, trainId) =>
-                        outgoingResponse.write(`<td>${formatTimes(ts[station + trainId + activityType])}`))
+                        outgoingResponse.write(
+                            `<td class=${activityType}>${formatTimes(ts[station + trainId + activityType])}`))
                 })
             })
 
