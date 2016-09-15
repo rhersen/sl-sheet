@@ -6,18 +6,12 @@ const sheet = require('./sheet')
 function requestListener(incomingRequest, outgoingResponse) {
     const url = decodeURIComponent(incomingRequest.url)
 
+    let match
+
     if (/favicon.ico/.test(url))
         favicon(outgoingResponse)
-    else if (/api.stations/.test(url))
-        stations(writeStations)
-    else
-        sheet(outgoingResponse)
-
-    function writeStations(data) {
-        outgoingResponse.writeHead(200, {'Content-Type': 'application/json; charset=utf-8'})
-        outgoingResponse.write(JSON.stringify(data))
-        outgoingResponse.end()
-    }
+    else if (match = /\/(\w)/.exec(url))
+        sheet(outgoingResponse, match[1])
 }
 
 function favicon(response) {

@@ -8,18 +8,16 @@ const formatTimes = require('./formatTimes')
 const times = require('./times')
 const trains = require('./trains')
 
-function sheet(outgoingResponse) {
+function sheet(outgoingResponse, direction) {
     const locations = [
-        'Tul', 'Flb', 'Hu', 'Sta'
-        // 'Sta', 'Hu', 'Flb', 'Tul'
-        // 'Äs', 'Åbe', 'Sst', 'Cst', 'Ke'
-        // 'Ke', 'Cst', 'Sst', 'Åbe', 'Äs'
+        // 'Tul', 'Flb', 'Hu', 'Sta'
+        'Äs', 'Åbe', 'Sst', 'Cst', 'Ke'
     ]
 
     const postData = announcementQuery(`
-        <LIKE name='AdvertisedTrainIdent' value='/[13579]$/' />
-        <GT name='AdvertisedTimeAtLocation' value='$dateadd(-0:30:00)' />
-        <LT name='AdvertisedTimeAtLocation' value='$dateadd(0:30:00)' />`,
+        <LIKE name='AdvertisedTrainIdent' value='/[${direction === 'n' ? '02468' : '13579'}]$/' />
+        <GT name='AdvertisedTimeAtLocation' value='$dateadd(-0:24:00)' />
+        <LT name='AdvertisedTimeAtLocation' value='$dateadd(0:24:00)' />`,
         locations
     )
 
@@ -61,6 +59,9 @@ function sheet(outgoingResponse) {
 
             foreach(trainIds, (location, trainId) =>
                 outgoingResponse.write(`<th>${trainId} ${location}`))
+
+            if (direction === 's')
+                locations.reverse()
 
             locations.forEach(station => {
                 activityTypes.forEach(activityType => {
