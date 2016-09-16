@@ -10,16 +10,11 @@ const trains = require('./trains')
 
 function sheet(outgoingResponse, direction) {
     const locations = [
-        // 'Tul', 'Flb', 'Hu', 'Sta'
-        'Äs', 'Åbe', 'Sst', 'Cst', 'Ke'
+        'Tul', 'Flb', 'Hu', 'Sta'
+        // 'Äs', 'Åbe', 'Sst', 'Cst', 'Ke'
     ]
 
-    const postData = announcementQuery(`
-        <LIKE name='AdvertisedTrainIdent' value='/[${direction === 'n' ? '02468' : '13579'}]$/' />
-        <GT name='AdvertisedTimeAtLocation' value='$dateadd(-0:24:00)' />
-        <LT name='AdvertisedTimeAtLocation' value='$dateadd(0:24:00)' />`,
-        locations
-    )
+    const postData = announcementQuery('0:36:00', locations, direction)
 
     const options = {
         hostname: 'api.trafikinfo.trafikverket.se',
