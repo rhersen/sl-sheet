@@ -1,6 +1,6 @@
 const atob = require('atob')
 
-const stations = require('./stations')
+const index = require('./index')
 const sheet = require('./sheet')
 
 function requestListener(incomingRequest, outgoingResponse) {
@@ -12,6 +12,8 @@ function requestListener(incomingRequest, outgoingResponse) {
         favicon(outgoingResponse)
     else if (match = /\/(\w)/.exec(url))
         sheet(outgoingResponse, match[1])
+    else
+        index(outgoingResponse)
 }
 
 function favicon(response) {

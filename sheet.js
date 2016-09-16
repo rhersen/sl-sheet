@@ -10,11 +10,11 @@ const trains = require('./trains')
 
 function sheet(outgoingResponse, direction) {
     const locations = [
-        'Tul', 'Flb', 'Hu', 'Sta'
-        // 'Äs', 'Åbe', 'Sst', 'Cst', 'Ke'
+        // 'Tul', 'Flb', 'Hu', 'Sta'
+        'Äs', 'Åbe', 'Sst', 'Cst', 'Ke'
     ]
 
-    const postData = announcementQuery('0:36:00', locations, direction)
+    const postData = announcementQuery('0:24:00', locations, direction)
 
     const options = {
         hostname: 'api.trafikinfo.trafikverket.se',
