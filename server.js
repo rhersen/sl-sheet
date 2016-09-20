@@ -10,8 +10,8 @@ function requestListener(incomingRequest, outgoingResponse) {
 
     if (/favicon.ico/.test(url))
         favicon(outgoingResponse)
-    else if (match = /\/(\w)/.exec(url))
-        sheet(outgoingResponse, match[1])
+    else if (match = /\/([cnsew])\/([ns])/.exec(url))
+        sheet(outgoingResponse, match[1], match[2])
     else
         index(outgoingResponse)
 }

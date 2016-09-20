@@ -10,12 +10,16 @@ const formatTimes = require('./formatTimes')
 const times = require('./times')
 const trains = require('./trains')
 
-function sheet(outgoingResponse, direction) {
-    const locations = [
-        // 'Tul', 'Flb', 'Hu', 'Sta'
-        'Äs', 'Åbe', 'Sst', 'Cst', 'Ke'
-    ]
+function sheet(outgoingResponse, branch, direction) {
+    const location = {
+        c: ['Äs', 'Åbe', 'Sst', 'Cst', 'Ke'],
+        n: ['So', 'Udl', 'Hel', 'Sol', 'Hgv', 'Nvk', 'R', 'Upv', 'Arnc'],
+        s: ['Tul', 'Flb', 'Hu', 'Sta'],
+        e: ['Hnd', 'Skg', 'Tåd', 'Fas'],
+        w: ['Sub', 'Spå', 'Bkb', 'Jkb']
+    }
 
+    const locations = location[branch]
     const postData = announcementQuery('0:24:00', locations, direction)
 
     const options = {
@@ -55,7 +59,7 @@ function sheet(outgoingResponse, direction) {
             outgoingResponse.write('<table>')
             outgoingResponse.write('<tr><th>')
 
-            foreach(trainIds, trainId => outgoingResponse.write(`<th>${trainId} ${location(trainId)}`))
+            foreach(trainIds, trainId => outgoingResponse.write(`<th>${trainId} ${locationName(trainId)}`))
 
             if (direction === 's')
                 locations.reverse()
@@ -75,7 +79,7 @@ function sheet(outgoingResponse, direction) {
 
             outgoingResponse.end()
 
-            function location(trainId) {
+            function locationName(trainId) {
                 return map(find(announcements, {AdvertisedTrainIdent: trainId}).ToLocation, 'LocationName')
             }
         }
