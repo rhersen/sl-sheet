@@ -1,6 +1,8 @@
 const http = require('http')
 
+const find = require('lodash.find')
 const foreach = require('lodash.foreach')
+const map = require('lodash.map')
 
 const announcementQuery = require('./announcementQuery')
 const css = require('./css')
@@ -39,6 +41,7 @@ function sheet(outgoingResponse, direction) {
         incomingResponse.on('end', done)
 
         function done() {
+            // console.log(body)
             const activityTypes = ['Ankomst', 'Avgang']
             const announcements = JSON.parse(body).RESPONSE.RESULT[0].TrainAnnouncement
             const trainIds = trains(announcements)
@@ -52,8 +55,7 @@ function sheet(outgoingResponse, direction) {
             outgoingResponse.write('<table>')
             outgoingResponse.write('<tr><th>')
 
-            foreach(trainIds, (location, trainId) =>
-                outgoingResponse.write(`<th>${trainId} ${location}`))
+            foreach(trainIds, trainId => outgoingResponse.write(`<th>${trainId} ${location(trainId)}`))
 
             if (direction === 's')
                 locations.reverse()
@@ -63,7 +65,7 @@ function sheet(outgoingResponse, direction) {
                     outgoingResponse.write('<tr>')
                     outgoingResponse.write(`<td class=${activityType}>${activityType.substr(0, 3)} ${station}`)
 
-                    foreach(trainIds, (location, trainId) =>
+                    foreach(trainIds, trainId =>
                         outgoingResponse.write(
                             `<td class=${activityType}>${formatTimes(ts[station + trainId + activityType])}`))
                 })
@@ -72,6 +74,10 @@ function sheet(outgoingResponse, direction) {
             outgoingResponse.write('</table>')
 
             outgoingResponse.end()
+
+            function location(trainId) {
+                return map(find(announcements, {AdvertisedTrainIdent: trainId}).ToLocation, 'LocationName')
+            }
         }
     }
 

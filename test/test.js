@@ -68,7 +68,7 @@ describe('trains', function () {
                 'LocationSignature': 'Flb',
                 'ToLocation': [{'LocationName': 'Mr', 'Priority': 1, 'Order': 0}]
             }]
-        )).to.deep.equal({'2768': 'Mr'})
+        )).to.deep.equal(['2768'])
     })
 })
 

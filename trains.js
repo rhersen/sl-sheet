@@ -1,7 +1,5 @@
-const zipobject = require('lodash.zipobject')
+const uniq = require('lodash.uniq')
 
 module.exports = (announcements) => {
-    return zipobject(
-        announcements.map(a => a.AdvertisedTrainIdent),
-        announcements.map(a => a.ToLocation.map(to => to.LocationName).join(',')))
+    return uniq(announcements.map(a => a.AdvertisedTrainIdent))
 }

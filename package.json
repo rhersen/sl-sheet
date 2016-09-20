@@ -1,7 +1,7 @@
 {
-  "name": "ingela",
+  "name": "sl-sheet",
   "version": "0.0.0",
-  "description": "",
+  "repository": "https://github.com/rhersen/sl-sheet",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -10,8 +10,13 @@
   "license": "BSD-2-Clause",
   "dependencies": {
     "atob": "^2.0.3",
+    "lodash.filter": "4.x",
+    "lodash.find": "4.x",
     "lodash.foreach": "4.x",
+    "lodash.map": "4.x",
+    "lodash.mapvalues": "4.x",
     "lodash.keyby": "4.x",
+    "lodash.uniq": "4.x",
     "lodash.zipobject": "4.x",
     "moment": "^2.13.0"
   },
