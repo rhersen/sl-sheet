@@ -70,6 +70,49 @@ describe('trains', function () {
             }]
         )).to.deep.equal(['2768'])
     })
+
+    it('sorts on AdvertisedTimeAtLocation', function () {
+        expect(trains(
+            [{
+                'ActivityType': 'Ankomst',
+                'AdvertisedTimeAtLocation': '2016-09-21T06:04:00',
+                'AdvertisedTrainIdent': '2507',
+                'LocationSignature': 'Spå',
+                'ToLocation': [{'LocationName': 'Vhe', 'Priority': 1, 'Order': 0}]
+            }, {
+                'ActivityType': 'Avgang',
+                'AdvertisedTimeAtLocation': '2016-09-21T06:04:00',
+                'AdvertisedTrainIdent': '2507',
+                'LocationSignature': 'Spå',
+                'ToLocation': [{'LocationName': 'Vhe', 'Priority': 1, 'Order': 0}]
+            }, {
+                'ActivityType': 'Ankomst',
+                'AdvertisedTimeAtLocation': '2016-09-21T05:54:00',
+                'AdvertisedTrainIdent': '2305',
+                'LocationSignature': 'Sub',
+                'ToLocation': [{'LocationName': 'Nyh', 'Priority': 1, 'Order': 0}],
+                'TimeAtLocation': '2016-09-21T05:53:00'
+            }, {
+                'ActivityType': 'Avgang',
+                'AdvertisedTimeAtLocation': '2016-09-21T05:54:00',
+                'AdvertisedTrainIdent': '2305',
+                'LocationSignature': 'Sub',
+                'ToLocation': [{'LocationName': 'Nyh', 'Priority': 1, 'Order': 0}],
+                'TimeAtLocation': '2016-09-21T05:54:00'
+            }, {
+                'ActivityType': 'Ankomst',
+                'AdvertisedTimeAtLocation': '2016-09-21T06:09:00',
+                'AdvertisedTrainIdent': '2507',
+                'LocationSignature': 'Sub',
+                'ToLocation': [{'LocationName': 'Vhe', 'Priority': 1, 'Order': 0}]
+            }, {
+                'ActivityType': 'Avgang',
+                'AdvertisedTimeAtLocation': '2016-09-21T06:09:00',
+                'AdvertisedTrainIdent': '2507',
+                'LocationSignature': 'Sub',
+                'ToLocation': [{'LocationName': 'Vhe', 'Priority': 1, 'Order': 0}]
+            }])).to.deep.equal(['2305', '2507'])
+    })
 })
 
 describe('times', function () {
