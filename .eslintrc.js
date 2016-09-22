@@ -24,10 +24,10 @@ module.exports = {
     "plugins": [],
     "rules": {
         "curly": ["error", "multi"],
-        "complexity": ["error", 6],
+        "complexity": ["error", 4],
         "indent": ["error", 4],
         "linebreak-style": ["error", "unix"],
-        "max-depth": ["error", 4],
+        "max-depth": ["error", 2],
         "max-len": ["error", 120],
         "max-params": ["error", 3],
         "max-statements": ["error", 23],

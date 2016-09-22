@@ -1,25 +1,32 @@
 const filter = require('lodash.filter')
+const find = require('lodash.find')
 const map = require('lodash.map')
 const uniq = require('lodash.uniq')
 
-module.exports = (announcements) =>
-    uniq(map(announcements, 'AdvertisedTrainIdent'))
-        .sort((id1, id2) => {
-            const a1 = filter(announcements, {AdvertisedTrainIdent: id1})
+function trains(announcements) {
+    return uniq(map(announcements, 'AdvertisedTrainIdent'))
+        .sort((leftId, rightId) => {
+            const left = filter(announcements, {AdvertisedTrainIdent: leftId})
 
-            for (let i = 0; i < a1.length; i++) {
-                const a2 = filter(announcements, {
-                    AdvertisedTrainIdent: id2,
-                    LocationSignature: a1[i].LocationSignature,
-                    ActivityType: a1[i].ActivityType
+            for (let i = 0; i < left.length; i++) {
+                const right = find(announcements, {
+                    AdvertisedTrainIdent: rightId,
+                    LocationSignature: left[i].LocationSignature,
+                    ActivityType: left[i].ActivityType
                 })
 
-                const time1 = a1[i].AdvertisedTimeAtLocation
-
-                for (let j = 0; j < a2.length; j++) {
-                    const time2 = a2[j].AdvertisedTimeAtLocation
-                    if (time1 < time2) return -1
-                    if (time1 > time2) return 1
-                }
+                if (right)
+                    return compareTimes(left[i], right)
             }
         })
+}
+
+function compareTimes(a1, a2) {
+    const time1 = a1.AdvertisedTimeAtLocation
+    const time2 = a2.AdvertisedTimeAtLocation
+    if (time1 < time2) return -1
+    if (time1 > time2) return 1
+    return 0
+}
+
+module.exports = trains
