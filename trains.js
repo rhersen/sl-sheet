@@ -6,26 +6,38 @@ const moment = require('moment')
 const uniq = require('lodash.uniq')
 
 function trains(announcements, now) {
-    const lower = moment(now).subtract(55, 'minutes').format()
-    const upper = moment(now).add(55, 'minutes').format()
-    const tooEarly = uniq(map(filter(announcements, a => a.AdvertisedTimeAtLocation < lower), 'AdvertisedTrainIdent'))
-    const tooLate = uniq(map(filter(announcements, a => a.AdvertisedTimeAtLocation > upper), 'AdvertisedTrainIdent'))
+    const lowerBound = moment(now).subtract(55, 'minutes').format()
+    const upperBound = moment(now).add(55, 'minutes').format()
 
-    return difference(uniq(map(announcements, 'AdvertisedTrainIdent'))
-        .sort((leftId, rightId) => {
-            const left = filter(announcements, {AdvertisedTrainIdent: leftId})
+    return difference(ids(announcements), ids(filter(announcements, isTooEarly)), ids(filter(announcements, isTooLate)))
+        .sort(byAdvertisedTime)
 
-            for (let i = 0; i < left.length; i++) {
-                const right = find(announcements, {
-                    AdvertisedTrainIdent: rightId,
-                    LocationSignature: left[i].LocationSignature,
-                    ActivityType: left[i].ActivityType
-                })
+    function isTooEarly(a) {
+        return a.AdvertisedTimeAtLocation < lowerBound
+    }
 
-                if (right)
-                    return compareTimes(left[i], right)
-            }
-        }), tooEarly, tooLate)
+    function isTooLate(a) {
+        return a.AdvertisedTimeAtLocation > upperBound
+    }
+
+    function byAdvertisedTime(leftId, rightId) {
+        const left = filter(announcements, {AdvertisedTrainIdent: leftId})
+
+        for (let i = 0; i < left.length; i++) {
+            const right = find(announcements, {
+                AdvertisedTrainIdent: rightId,
+                LocationSignature: left[i].LocationSignature,
+                ActivityType: left[i].ActivityType
+            })
+
+            if (right)
+                return compareTimes(left[i], right)
+        }
+    }
+}
+
+function ids(announcements) {
+    return uniq(map(announcements, 'AdvertisedTrainIdent'))
 }
 
 function compareTimes(a1, a2) {
