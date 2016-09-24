@@ -3,6 +3,7 @@ const http = require('http')
 const find = require('lodash.find')
 const foreach = require('lodash.foreach')
 const map = require('lodash.map')
+const moment = require('moment')
 
 const announcementQuery = require('./announcementQuery')
 const css = require('./css')
@@ -20,7 +21,7 @@ function sheet(outgoingResponse, branch, direction) {
     }
 
     const locations = location[branch]
-    const postData = announcementQuery('0:24:00', locations, direction)
+    const postData = announcementQuery('1:00:00', locations, direction)
 
     const options = {
         hostname: 'api.trafikinfo.trafikverket.se',
@@ -48,7 +49,7 @@ function sheet(outgoingResponse, branch, direction) {
             // console.log(body)
             const activityTypes = ['Ankomst', 'Avgang']
             const announcements = JSON.parse(body).RESPONSE.RESULT[0].TrainAnnouncement
-            const trainIds = trains(announcements)
+            const trainIds = trains(announcements, moment())
             const ts = times(announcements)
 
             outgoingResponse.writeHead(200, {'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-cache'})

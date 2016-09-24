@@ -67,7 +67,7 @@ describe('trains', function () {
                 'AdvertisedTrainIdent': '2768',
                 'LocationSignature': 'Flb',
                 'ToLocation': [{'LocationName': 'Mr', 'Priority': 1, 'Order': 0}]
-            }]
+            }], '2016-09-05T21:25:00'
         )).to.deep.equal(['2768'])
     })
 
@@ -111,7 +111,36 @@ describe('trains', function () {
                 'AdvertisedTrainIdent': '2507',
                 'LocationSignature': 'Sub',
                 'ToLocation': [{'LocationName': 'Vhe', 'Priority': 1, 'Order': 0}]
-            }])).to.deep.equal(['2305', '2507'])
+            }], '2016-09-21T06:09:00'
+        )).to.deep.equal(['2305', '2507'])
+    })
+
+    it('removes trains with activities an hour before now', function () {
+        expect(trains(
+            [{
+                'ActivityType': 'Avgang',
+                'AdvertisedTimeAtLocation': '2016-09-21T05:54:00',
+                'AdvertisedTrainIdent': '2305'
+            }, {
+                'ActivityType': 'Avgang',
+                'AdvertisedTimeAtLocation': '2016-09-21T06:09:00',
+                'AdvertisedTrainIdent': '2507'
+            }], '2016-09-21T07:00:00'
+        )).to.deep.equal(['2507'])
+    })
+
+    it('removes trains with activities an hour after now', function () {
+        expect(trains(
+            [{
+                'ActivityType': 'Avgang',
+                'AdvertisedTimeAtLocation': '2016-09-21T05:54:00',
+                'AdvertisedTrainIdent': '2305'
+            }, {
+                'ActivityType': 'Avgang',
+                'AdvertisedTimeAtLocation': '2016-09-21T06:09:00',
+                'AdvertisedTrainIdent': '2507'
+            }], '2016-09-21T05:00:00'
+        )).to.deep.equal(['2305'])
     })
 })
 

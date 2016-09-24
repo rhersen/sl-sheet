@@ -1,10 +1,17 @@
+const difference = require('lodash.difference')
 const filter = require('lodash.filter')
 const find = require('lodash.find')
 const map = require('lodash.map')
+const moment = require('moment')
 const uniq = require('lodash.uniq')
 
-function trains(announcements) {
-    return uniq(map(announcements, 'AdvertisedTrainIdent'))
+function trains(announcements, now) {
+    const lower = moment(now).subtract(55, 'minutes').format()
+    const upper = moment(now).add(55, 'minutes').format()
+    const tooEarly = uniq(map(filter(announcements, a => a.AdvertisedTimeAtLocation < lower), 'AdvertisedTrainIdent'))
+    const tooLate = uniq(map(filter(announcements, a => a.AdvertisedTimeAtLocation > upper), 'AdvertisedTrainIdent'))
+
+    return difference(uniq(map(announcements, 'AdvertisedTrainIdent'))
         .sort((leftId, rightId) => {
             const left = filter(announcements, {AdvertisedTrainIdent: leftId})
 
@@ -18,7 +25,7 @@ function trains(announcements) {
                 if (right)
                     return compareTimes(left[i], right)
             }
-        })
+        }), tooEarly, tooLate)
 }
 
 function compareTimes(a1, a2) {
