@@ -6,16 +6,21 @@ module.exports = function (s) {
     const e = f(s.EstimatedTimeAtLocation)
     const t = f(s.TimeAtLocation)
 
-    if (!e && !t)
-        return a
-
     if (a === t)
         return wrap(t, 'b')
 
-    if (t)
-        return `${a}/${wrap(t, 'b')}`
+    if (t) {
+        if (s.ActivityType === 'Ankomst')
+            return wrap(t, 'b')
 
-    return `${a}/${wrap(e, 'i')}`
+        return `${a}/${wrap(t, 'b')}`
+    }
+
+    if (e)
+        return `${a}/${wrap(e, 'i')}`
+
+    return a
+
 }
 
 function wrap(s, tag) {
@@ -27,18 +32,11 @@ function wrap(s, tag) {
 
 function f(s) {
     let match
+    const regExp = [/T0(\d:\d\d):00/, /T0(\d:\d\d:\d\d)/, /T(\d\d:\d\d):00/, /T(\d\d:\d\d:\d\d)/]
 
-    if (match = /T0(\d:\d\d):00/.exec(s))
-        return match[1]
-
-    if (match = /T0(\d:\d\d:\d\d)/.exec(s))
-        return match[1]
-
-    if (match = /T(\d\d:\d\d):00/.exec(s))
-        return match[1]
-
-    if (match = /T(\d\d:\d\d:\d\d)/.exec(s))
-        return match[1]
+    for (let i = 0; i < regExp.length; i++)
+        if (match = regExp[i].exec(s))
+            return match[1]
 
     return ''
 }
