@@ -60,7 +60,7 @@ function sheet(outgoingResponse, branch, direction) {
             outgoingResponse.write('<table>')
             outgoingResponse.write('<tr><th>')
 
-            foreach(trainIds, trainId => outgoingResponse.write(`<th>${trainId} ${locationName(trainId)}`))
+            foreach(trainIds, trainId => outgoingResponse.write(`<th>${locationName(trainId)}<br>${trainId}`))
 
             if (direction === 's')
                 locations.reverse()
