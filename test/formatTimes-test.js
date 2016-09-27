@@ -27,7 +27,7 @@ describe('formatTimes', function () {
         expect(formatTimes({
             'AdvertisedTimeAtLocation': '2016-09-05T21:23:00',
             'TimeAtLocation': '2016-09-05T21:25:00'
-        })).to.equal('21:23/<b>21:25</b>')
+        })).to.equal('<b>21:25</b>/23')
     })
 
     it('does not show advertised if actual is same', function () {

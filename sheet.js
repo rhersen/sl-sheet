@@ -15,7 +15,7 @@ function sheet(outgoingResponse, branch, direction) {
     const location = {
         c: ['Äs', 'Åbe', 'Sst', 'Cst', 'Ke'],
         n: ['So', 'Udl', 'Hel', 'Sol', 'Hgv', 'Nvk', 'R', 'Upv', 'Arnc'],
-        s: ['Tul', 'Flb', 'Hu', 'Sta'],
+        s: ['Rön', 'Tu', 'Tul', 'Flb', 'Hu', 'Sta'],
         e: ['Hnd', 'Skg', 'Tåd', 'Fas'],
         w: ['Sub', 'Spå', 'Bkb', 'Jkb']
     }
