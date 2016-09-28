@@ -13,14 +13,17 @@ module.exports = function (s) {
         if (s.ActivityType === 'Ankomst')
             return wrap(t, 'b')
 
-        return `${wrap(t, 'b')}/${a.substr(a.indexOf(':') + 1)}`
+        return `${wrap(t, 'b')}/${removeHours(a)}`
     }
 
     if (e)
-        return `${a}/${wrap(e, 'i')}`
+        return `${wrap(e, 'i')}/${removeHours(a)}`
 
     return a
 
+    function removeHours(time) {
+        return time.substr(time.indexOf(':') + 1)
+    }
 }
 
 function wrap(s, tag) {

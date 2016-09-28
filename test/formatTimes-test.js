@@ -20,7 +20,7 @@ describe('formatTimes', function () {
         expect(formatTimes({
             'AdvertisedTimeAtLocation': '2016-09-05T21:23:00',
             'EstimatedTimeAtLocation': '2016-09-05T21:24:00'
-        })).to.equal('21:23/<i>21:24</i>')
+        })).to.equal('<i>21:24</i>/23')
     })
 
     it('does not show estimated if actual exists', function () {
@@ -57,6 +57,6 @@ describe('formatTimes', function () {
             'ActivityType': 'Ankomst',
             'EstimatedTimeAtLocation': '2016-09-05T21:24:00',
             'AdvertisedTimeAtLocation': '2016-09-05T21:23:00'
-        })).to.equal('21:23/<i>21:24</i>')
+        })).to.equal('<i>21:24</i>/23')
     })
 })
