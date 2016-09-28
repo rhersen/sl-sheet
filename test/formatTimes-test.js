@@ -30,6 +30,13 @@ describe('formatTimes', function () {
         })).to.equal('<b>21:25</b>/23')
     })
 
+    it('cuts off hours correctly even if they are one-digit', function () {
+        expect(formatTimes({
+            'AdvertisedTimeAtLocation': '2016-09-05T09:23:00',
+            'TimeAtLocation': '2016-09-05T09:25:00'
+        })).to.equal('<b>9:25</b>/23')
+    })
+
     it('does not show advertised if actual is same', function () {
         expect(formatTimes({
             'AdvertisedTimeAtLocation': '2016-09-05T21:23:00',

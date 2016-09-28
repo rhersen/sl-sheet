@@ -13,7 +13,7 @@ module.exports = function (s) {
         if (s.ActivityType === 'Ankomst')
             return wrap(t, 'b')
 
-        return `${wrap(t, 'b')}/${a.substr(3)}`
+        return `${wrap(t, 'b')}/${a.substr(a.indexOf(':') + 1)}`
     }
 
     if (e)
